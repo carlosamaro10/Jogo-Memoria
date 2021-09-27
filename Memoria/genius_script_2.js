@@ -18,14 +18,21 @@ let yellow = document.getElementsByClassName("amarelo").item(0);
 let green = document.getElementsByClassName("verde").item(0);
 let colors = [red, blue, yellow, green];
 let order = [];
-clickOrder = [];
+let clickOrder = [];
+let score = 0;
 
 //faz o o brilho e o som do elemento quando clicado
-function blink(element, with_audio = true) {
+function blink(element, with_audio = true, grow_up = false) {
   if (with_audio) {
     let audio_name = element.className + ".wav";
     let audio = new Audio(audio_name);
     audio.play();
+  }
+  if (grow_up) {
+    element.classList.add("grow-up");
+    setTimeout(() => {
+      element.classList.remove("grow-up");
+    }, 500);
   }
   element.classList.add("light");
   setTimeout(() => {
@@ -39,10 +46,10 @@ function addOneColorToOrder() {
 }
 
 function blinkOrder() {
-  let count = 0;
+  let count = 0.5;
   for (let element of order) {
     setTimeout(() => {
-      blink(element, false);
+      blink(element, false, true);
     }, 1000 * count);
     count++;
   }
@@ -66,7 +73,7 @@ function blinkAll() {
     blink(blue, false);
     blink(yellow, false);
     blink(green, false);
-  }, 1000);
+  }, 1200);
 }
 
 addOneColorToOrder();
@@ -75,9 +82,9 @@ function clicar(element) {
   blink(element);
   clickOrder[clickOrder.length] = element;
   if (check()) {
-    console.log("Por Enquanto tudo certo");
     if (clickOrder.length == order.length && check()) {
       blinkAll();
+      score++;
       setTimeout(() => {
         clickOrder = [];
         addOneColorToOrder();
@@ -85,6 +92,6 @@ function clicar(element) {
       }, 2000);
     }
   } else {
-    console.log("Perdeu");
+    alert("Voce perdeu");
   }
 }
