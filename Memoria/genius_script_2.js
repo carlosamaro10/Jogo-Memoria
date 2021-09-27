@@ -18,6 +18,7 @@ let yellow = document.getElementsByClassName("amarelo").item(0);
 let green = document.getElementsByClassName("verde").item(0);
 let colors = [red, blue, yellow, green];
 let order = [];
+clickOrder = [];
 
 //faz o o brilho e o som do elemento quando clicado
 function blink(element, with_audio = true) {
@@ -36,6 +37,7 @@ function addOneColorToOrder() {
   rand_int = Math.floor(Math.random() * 4);
   order[order.length] = colors[rand_int];
 }
+
 function blinkOrder() {
   let count = 0;
   for (let element of order) {
@@ -46,12 +48,43 @@ function blinkOrder() {
   }
 }
 
-addOneColorToOrder();
-addOneColorToOrder();
-addOneColorToOrder();
-addOneColorToOrder();
-addOneColorToOrder();
-addOneColorToOrder();
+function check() {
+  for (let e in clickOrder) {
+    if (clickOrder[e] != order[e]) {
+      return false;
+    }
+  }
+  return true;
+}
+function blinkAll() {
+  blink(red, false);
+  blink(blue, false);
+  blink(yellow, false);
+  blink(green, false);
+  setTimeout(() => {
+    blink(red, false);
+    blink(blue, false);
+    blink(yellow, false);
+    blink(green, false);
+  }, 1000);
+}
+
 addOneColorToOrder();
 blinkOrder();
-console.log(order);
+function clicar(element) {
+  blink(element);
+  clickOrder[clickOrder.length] = element;
+  if (check()) {
+    console.log("Por Enquanto tudo certo");
+    if (clickOrder.length == order.length && check()) {
+      blinkAll();
+      setTimeout(() => {
+        clickOrder = [];
+        addOneColorToOrder();
+        blinkOrder();
+      }, 2000);
+    }
+  } else {
+    console.log("Perdeu");
+  }
+}
